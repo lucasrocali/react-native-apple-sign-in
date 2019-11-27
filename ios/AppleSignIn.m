@@ -54,9 +54,9 @@ RCT_EXPORT_METHOD(requestAsync:(NSDictionary *)options
   
   ASAuthorizationAppleIDProvider* appleIDProvider = [[ASAuthorizationAppleIDProvider alloc] init];
   ASAuthorizationAppleIDRequest* request = [appleIDProvider createRequest];
-  request.requestedScopes = options[@"requestedScopes"];
-  if (options[@"requestedOperation"]) {
-    request.requestedOperation = options[@"requestedOperation"];
+  request.requestedScopes = options[@"scopes"];
+  if (options[@"operations"]) {
+    request.requestedOperation = options[@"operations"];
   }
   
   ASAuthorizationController* ctrl = [[ASAuthorizationController alloc] initWithAuthorizationRequests:@[request]];
@@ -75,14 +75,15 @@ RCT_EXPORT_METHOD(requestAsync:(NSDictionary *)options
    didCompleteWithAuthorization:(ASAuthorization *)authorization {
   ASAuthorizationAppleIDCredential* credential = authorization.credential;
   NSDictionary* user = @{
-                         @"fullName": RCTNullIfNil(credential.fullName),
+                         @"givenName": RCTNullIfNil(credential.fullName.givenName),
+                         @"familyName": RCTNullIfNil(credential.fullName.familyName),
                          @"email": RCTNullIfNil(credential.email),
                          @"user": credential.user,
                          @"authorizedScopes": credential.authorizedScopes,
                          @"realUserStatus": @(credential.realUserStatus),
                          @"state": RCTNullIfNil(credential.state),
-                         @"authorizationCode": RCTNullIfNil(credential.authorizationCode),
-                         @"identityToken": RCTNullIfNil(credential.identityToken)
+                         @"authorizationCode": [[NSString alloc] initWithData:credential.authorizationCode encoding:NSASCIIStringEncoding],
+                         @"identityToken": [[NSString alloc] initWithData:credential.identityToken encoding:NSASCIIStringEncoding],
                          };
   _promiseResolve(user);
 }
