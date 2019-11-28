@@ -39,21 +39,27 @@ From react-native version 0.60 we don't need to link any third party module sepa
 ## Usage
 ```javascript
 
-import { SignInWithAppleButton } from 'react-native-apple-sign-in'
+import { AppleSignInAction } from 'react-native-apple-sign-in'
 export default class App extends React.Component{
 
   render(){
     return(
-    <View style = {styles.container}>
-     {SignInWithAppleButton(styles.appleBtn, this.appleSignIn)}
+    <View style={styles.container}>
+     <TouchableOpacity
+        style={styles.appleBtn}
+        onPress={this.appleSignIn}
+     />
     </View>)
 
   }
 
-  appleSignIn = (result) => {
-    console.log('Resssult',result);
-  };
-
+  async appleSignIn = () => {
+    try {
+        const result = await AppleSignInAction()
+       console.log(result)
+   } catch (e) {
+     console.log(e)
+   }
 }
 
 
