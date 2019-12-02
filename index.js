@@ -27,10 +27,7 @@ export const SignInWithAppleButton = (buttonStyle, callBack) => {
 }
 
 export const AppleSignInAction = async () => {
-  return AppleSignIn.requestAsync({
-    scopes: [AppleSignIn.Scope.FULL_NAME, AppleSignIn.Scope.EMAIL],
-    operations: [AppleSignIn.Operation.LOGIN]
-  })
+  return AppleSignIn.requestAsync({})
 
 }
 
